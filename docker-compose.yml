@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  api-java-springboot-docker:
+    container_name: api-java-springboot-docker
+    image: postgres
+    ports:
+      - 3737:5432
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
