@@ -9,5 +9,5 @@ import com.gabrielpenteado.apijavaspringbootdocker.models.UserModel;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, UUID> {
-
+    UserModel findByEmail(String email);
 }
