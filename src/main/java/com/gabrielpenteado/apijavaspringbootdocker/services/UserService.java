@@ -19,21 +19,39 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public UserModel getUserService(String email) {
+    public UserModel getUserByEmailService(String email) {
         return userRepository.findByEmail(email);
 
     }
 
-    public UserModel saveUserService(UserModel userModel) {
-        if (userModel != null) {
-            userRepository.save(userModel);
+    @SuppressWarnings("null")
+    public UserModel getUserByIdService(UUID id) {
+        UserModel user = userRepository.findById(id).get();
+        return user;
+    }
+
+    public UserModel saveUserService(UserModel user) {
+        if (user != null) {
+            userRepository.save(user);
         }
-        return userModel;
+        return user;
+    }
+
+    @SuppressWarnings("null")
+    public UserModel updateUserService(UUID id, UserModel user) {
+        UserModel userToUpdate = userRepository.findById(id).get();
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setAddress(user.getAddress());
+        userToUpdate.setName(user.getName());
+        userToUpdate.setUrlAvatar(user.getUrlAvatar());
+
+        userRepository.save(userToUpdate);
+        return userToUpdate;
     }
 
     public String deleteUserByIdService(UUID id) {
-        boolean userIdTodelete = id != null ? userRepository.existsById(id) : false;
-        if (userIdTodelete && (id != null)) {
+        boolean userIdExists = id != null ? userRepository.existsById(id) : false;
+        if (userIdExists && (id != null)) {
             userRepository.deleteById(id);
             return "User ID " + id + " was deleted!";
         } else {
