@@ -55,6 +55,7 @@ public class UserService {
         if (userO.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
+        userO.get().add(linkTo(methodOn(UserController.class).getAllUsersController()).withRel("Users List"));
         return ResponseEntity.status(HttpStatus.OK).body(userO.get());
     }
 
