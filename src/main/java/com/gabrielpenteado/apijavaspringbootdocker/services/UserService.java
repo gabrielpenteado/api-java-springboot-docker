@@ -4,14 +4,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.gabrielpenteado.apijavaspringbootdocker.controllers.UserController;
 import com.gabrielpenteado.apijavaspringbootdocker.dto.UserRecordDto;
 import com.gabrielpenteado.apijavaspringbootdocker.models.UserModel;
 import com.gabrielpenteado.apijavaspringbootdocker.repositories.UserRepository;
@@ -24,14 +26,21 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @SuppressWarnings("null")
     public ResponseEntity<List<UserModel>> getAllUsersService() {
-        return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAll());
+        List<UserModel> usersList = userRepository.findAll();
+        if (!usersList.isEmpty()) {
+            for (UserModel user : usersList) {
+                user.add(linkTo(methodOn(UserController.class).getUserByIdController(user.getId())).withSelfRel());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(usersList);
     }
 
     public ResponseEntity<Object> getUserByEmailService(String email) {
         Optional<UserModel> userO = userRepository.findByEmail(email);
         if (userO.isEmpty()) {
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User of email " + email + " not found.")
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User of email " + email + " not found.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(userO.get());
 
@@ -73,7 +82,7 @@ public class UserService {
     }
 
     @SuppressWarnings("null")
-    public ResponseEntity<String> deleteUserByIdService(UUID id) {
+    public ResponseEntity<Object> deleteUserByIdService(UUID id) {
         Optional<UserModel> userO = userRepository.findById(id);
         if (userO.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
@@ -84,7 +93,7 @@ public class UserService {
     }
 
     @SuppressWarnings("null")
-    public ResponseEntity<String> deleteUserByEmailService(String email) {
+    public ResponseEntity<Object> deleteUserByEmailService(String email) {
         Optional<UserModel> userO = userRepository.findByEmail(email);
         if (userO.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User of email " + email + " not found.");

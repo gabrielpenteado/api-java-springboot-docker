@@ -57,13 +57,13 @@ public class UserController {
     }
 
     @DeleteMapping("deletebyid/{id}")
-    public ResponseEntity<String> deleteUserByIdController(@PathVariable("id") UUID id) {
+    public ResponseEntity<Object> deleteUserByIdController(@PathVariable("id") UUID id) {
         return userService.deleteUserByIdService(id);
 
     }
 
     @DeleteMapping("deletebyemail")
-    public ResponseEntity<String> deleteUserByEmailController(@RequestParam String email) {
+    public ResponseEntity<Object> deleteUserByEmailController(@RequestParam String email) {
         return userService.deleteUserByEmailService(email);
     }
 
