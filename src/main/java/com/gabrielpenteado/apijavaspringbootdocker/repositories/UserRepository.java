@@ -1,5 +1,6 @@
 package com.gabrielpenteado.apijavaspringbootdocker.repositories;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,5 +10,5 @@ import com.gabrielpenteado.apijavaspringbootdocker.models.UserModel;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, UUID> {
-    UserModel findByEmail(String email);
+    Optional<UserModel> findByEmail(String email);
 }
