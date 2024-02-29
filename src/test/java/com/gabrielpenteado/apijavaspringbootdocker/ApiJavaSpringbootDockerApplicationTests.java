@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.gabrielpenteado.apijavaspringbootdocker.models.UserModel;
+import com.gabrielpenteado.apijavaspringbootdocker.dto.UserRecordDto;
+
 import com.gabrielpenteado.apijavaspringbootdocker.services.UserService;
 
 @SpringBootTest
@@ -17,17 +18,12 @@ class ApiJavaSpringbootDockerApplicationTests {
 
 	@Test
 	void testCreateUser() {
-		var user = UserModel
-				.builder()
-				.name("testname")
-				.email("testemail")
-				.address("testaddress")
-				.urlAvatar(null)
-				.build();
+		var userRecordDto = new UserRecordDto("testname", "testemail", "testaddress", null);
 
-		userService.saveUserService(user);
+		assertEquals(userService.saveUserService(userRecordDto).getBody(),
+				userService.getUserByEmailService("testemail").getBody());
 
-		assertEquals(user, userService.getUserByEmailService(user.getEmail()));
+		userService.deleteUserByEmailService("testemail");
 	}
 
 }

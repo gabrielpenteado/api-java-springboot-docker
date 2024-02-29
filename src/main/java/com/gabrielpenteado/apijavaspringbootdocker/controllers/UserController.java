@@ -34,7 +34,7 @@ public class UserController {
         return userService.getAllUsersService();
     }
 
-    @GetMapping("user")
+    @GetMapping("user/email")
     public ResponseEntity<Object> getUserByEmailController(@RequestParam String email) {
         return userService.getUserByEmailService(email);
     }
@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<UserModel> saveUserController(@RequestBody @Valid UserRecordDto userRecordDto) {
+    public ResponseEntity<Object> saveUserController(@RequestBody @Valid UserRecordDto userRecordDto) {
         return userService.saveUserService(userRecordDto);
     }
 
