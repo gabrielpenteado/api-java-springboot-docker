@@ -6,9 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +29,7 @@ public class UserService {
     public ResponseEntity<Object> getUserByEmailService(String email) {
         Optional<UserModel> userO = userRepository.findByEmail(email);
         if (userO.isEmpty()) {
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User of email " + email + " not found.")
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User of email " + email + " not found.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(userO.get());
 
@@ -49,8 +47,11 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(userO.get());
     }
 
-    @SuppressWarnings("null")
-    public ResponseEntity<UserModel> saveUserService(@Valid UserRecordDto userRecordDto) {
+    public ResponseEntity<Object> saveUserService(@Valid UserRecordDto userRecordDto) {
+        Optional<UserModel> userO = userRepository.findByEmail(userRecordDto.email());
+        if (userO.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists.");
+        }
         // Create a userModel
         var userModel = new UserModel();
 
