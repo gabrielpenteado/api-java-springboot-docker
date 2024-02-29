@@ -28,7 +28,7 @@ public class UserModel extends RepresentationModel<UserModel> implements Seriali
     private final static long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(nullable = false)

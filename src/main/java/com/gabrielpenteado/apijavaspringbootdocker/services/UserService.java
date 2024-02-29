@@ -58,8 +58,11 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(userO.get());
     }
 
-    @SuppressWarnings("null")
-    public ResponseEntity<UserModel> saveUserService(@Valid UserRecordDto userRecordDto) {
+    public ResponseEntity<Object> saveUserService(@Valid UserRecordDto userRecordDto) {
+        Optional<UserModel> userO = userRepository.findByEmail(userRecordDto.email());
+        if (userO.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists.");
+        }
         // Create a userModel
         var userModel = new UserModel();
 

@@ -17,11 +17,12 @@ class ApiJavaSpringbootDockerApplicationTests {
 
 	@Test
 	void testCreateUser() {
-		var user = new UserRecordDto("testName", "testEmail", "testAddress", "testUrlAvatar");
+		var userRecordDto = new UserRecordDto("testname", "testemail", "testaddress", null);
 
-		userService.saveUserService(user);
+		assertEquals(userService.saveUserService(userRecordDto).getBody(),
+				userService.getUserByEmailService("testemail").getBody());
 
-		assertEquals(user, userService.getUserByEmailService(user.email()));
+		userService.deleteUserByEmailService("testemail");
 	}
 
 }
