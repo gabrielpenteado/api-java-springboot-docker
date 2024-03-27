@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -45,12 +46,33 @@ public class UserController {
     @GetMapping("/cookies")
     public String getCookies(@AuthenticationPrincipal OidcUser userLogged) {
         return String.format("""
+                    <h1>OAuth2</h1>
                     <h3>principal: %s</h3>
                     <h3>Email attribute: %s</h3>
                     <h3>Authorities: %s</h3>
                     <h3>JWT: %s</h3>
                 """, userLogged, userLogged.getAttribute("email"), userLogged.getAuthorities(),
                 userLogged.getIdToken().getTokenValue());
+
+    }
+
+    // @GetMapping("/jwt")
+    // public String jwt(@AuthenticationPrincipal Jwt jwt) {
+    // return String.format("""
+    // principal: %s\n
+    // Email attribute: %s\n
+    // JWT: %s\n
+    // """, jwt.Claims(), jwt.getClaim(claim: "email"), jwt.getTokenValue());
+
+    // }
+
+    @GetMapping("/jwt")
+    public String jwt(@AuthenticationPrincipal org.springframework.security.oauth2.jwt.Jwt jwt) {
+        return String.format("""
+                principal: %s\n
+                Email attribute: %s\n
+                    JWT: %s\n
+                """, jwt.getClaims(), jwt.getClaim("email"), jwt.getTokenValue());
 
     }
 
