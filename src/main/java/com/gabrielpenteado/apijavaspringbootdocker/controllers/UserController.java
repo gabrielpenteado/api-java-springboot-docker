@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +39,19 @@ public class UserController {
     @GetMapping("user/email")
     public ResponseEntity<Object> getUserByEmailController(@RequestParam String email) {
         return userService.getUserByEmailService(email);
+    }
+
+    // routes for spring boot security
+    @GetMapping("/cookies")
+    public String getCookies(@AuthenticationPrincipal OidcUser userLogged) {
+        return String.format("""
+                    <h3>principal: %s</h3>
+                    <h3>Email attribute: %s</h3>
+                    <h3>Authorities: %s</h3>
+                    <h3>JWT: %s</h3>
+                """, userLogged, userLogged.getAttribute("email"), userLogged.getAuthorities(),
+                userLogged.getIdToken().getTokenValue());
+
     }
 
     @GetMapping("user/{id}")
