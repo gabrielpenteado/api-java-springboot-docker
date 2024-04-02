@@ -3,7 +3,7 @@
 </h1>
 
 <h2 align="center">
-  An RESTful API for CRUD operations; created with Java, SpringBoot and Docker.
+  RESTful API for CRUD operations; created with Java, SpringBoot and Docker.
 </h2>
 
 <div align="center">
